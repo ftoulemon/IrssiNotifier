@@ -96,11 +96,6 @@ sub print_text {
 sub should_send_notification {
     my $dest = @_ ? shift : $_;
 
-    my $opt = MSGLEVEL_HILIGHT | MSGLEVEL_MSGS;
-    if (!$lastDcc && (!($dest->{level} & $opt) || ($dest->{level} & MSGLEVEL_NOHILIGHT))) {
-        return 0; # not a hilight and not a dcc message
-    }
-
     if (!are_settings_valid()) {
         return 0; # invalid settings
     }
@@ -115,10 +110,6 @@ sub should_send_notification {
 
     if (Irssi::settings_get_bool('irssinotifier_screen_detached_only') && attached()) {
         return 0; # screen/tmux attached
-    }
-
-    if (Irssi::settings_get_bool("irssinotifier_ignore_active_window") && $dest->{window}->{refnum} == Irssi::active_win()->{refnum}) {
-        return 0; # ignore active window
     }
 
     my $ignored_servers_string = Irssi::settings_get_str("irssinotifier_ignored_servers");
@@ -175,6 +166,22 @@ sub should_send_notification {
     my $timeout = Irssi::settings_get_int('irssinotifier_require_idle_seconds');
     if ($timeout > 0 && (time - $lastKeyboardActivity) <= $timeout && attached()) {
         return 0; # not enough idle seconds
+    }
+
+    my $opt = MSGLEVEL_HILIGHT | MSGLEVEL_MSGS;
+    if (!$lastDcc && (!($dest->{level} & $opt) || ($dest->{level} & MSGLEVEL_NOHILIGHT))) {
+        if (!($dest->{level} & MSGLEVEL_PUBLIC)) {
+            return 0; # not a hilight and not a dcc message
+        }
+        my @strs = qw(http https);
+        if (!(grep { $lastMsg =~ /$_/i } @strs)) {
+            return 0;
+        }
+        return 1;
+    }
+  
+    if (Irssi::settings_get_bool("irssinotifier_ignore_active_window") && $dest->{window}->{refnum} == Irssi::active_win()->{refnum}) {
+        return 0; # ignore active window
     }
 
     return 1;
