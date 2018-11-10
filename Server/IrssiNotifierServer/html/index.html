@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<!-- IrssiNotifier, last updated 2013-05-28 -->
+<!-- IrssiNotifier, last updated 2016-03-26 -->
 
 <html>
 <head>
@@ -141,7 +141,7 @@
 
         <div class="google-play">
             <a href="https://play.google.com/store/apps/details?id=fi.iki.murgo.irssinotifier">
-                <img alt="Android app on Google Play" src="//developer.android.com/images/brand/en_app_rgb_wo_60.png" />
+                <img alt="Android app on Google Play" src="//play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" />
             </a>
         </div>
 
@@ -149,7 +149,7 @@
 
         <div class="google-play">
             <a href="https://play.google.com/store/apps/details?id=fi.iki.murgo.irssinotifier.plus">
-                <img alt="Android app on Google Play" src="//developer.android.com/images/brand/en_app_rgb_wo_45.png" />
+                <img alt="Android app on Google Play" src="//play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" />
             </a>
         </div>
 
@@ -173,7 +173,7 @@
 
         <p class="question">What do I need?</p>
         <p class="answer">
-            You'll need Irssi running on Linux server or similar. You'll also need an Android device (phone or tablet, or both) with Android version 2.2 (froyo) or later.
+            You'll need Irssi running on Linux server or similar (with wget installed). You'll also need an Android device (phone or tablet, or both) with Android version 2.2 (froyo) or later.
         </p>
 
         <p class="question">Privacy?</p>
@@ -211,6 +211,11 @@
         <h1>What's new?</h1>
 
         <p class="answer">For latest developments, check project's <a href="https://github.com/murgo/irssinotifier">Github page</a>.<p>
+
+        <p class="question news">21.2.2016 Server version 9 released.</p>
+        <div class="answer news-content">
+            Messages should now wake up Android 6.0 correctly. Thanks, <a href="https://github.com/scolphoy">scolphoy</a>, for the pull request.
+        </div>
 
         <p class="question news">8.4.2014 Irssi script 20 released.</p>
         <div class="answer news-content">
@@ -437,7 +442,7 @@
         <h2>Irssi script installation instructions</h2>
 
         <div class="answer">
-        (To upgrade script, just follow steps 1 and 2).
+        (To upgrade script, just follow steps 1 and 2). Script depends on wget and openssl.
         <ol>
             <li>Download Irssi script by copying and pasting the following command (as a single line) to your shell (don't mind any "File exists" -errors):
             <div class="code-block">mkdir -p ~/.irssi/scripts/autorun; wget --no-check-certificate https://irssinotifier.appspot.com/script/irssinotifier.pl -O ~/.irssi/scripts/irssinotifier.pl; ln -s ~/.irssi/scripts/irssinotifier.pl ~/.irssi/scripts/autorun/irssinotifier.pl</div>
@@ -451,7 +456,7 @@
             <li>Optional: Change your encryption password with the following command. You'll have to change the password to the Android device, too. Password can be anything you like (forbidden characters: ", \, `). Do not use your Google account password (or any other existing password) for security reasons.
             <div class="code-block">/set irssinotifier_encryption_password password</div>
             </li>
-            <li>Query yourself and check <a href="#profile">profile page</a> to see if it works.</li>
+            <li>Ask someone to hilight you or send yourself a private message and check <a href="#profile">profile page</a> to see if it works.</li>
         </ol>
         </div>
 
@@ -551,7 +556,7 @@
         <p>Registered on: <span class="datetime">{{ registration_date }}</span></p>
         <p>API token: {{ user.api_token }}</p>
 {% if license_type == 'Plus' %}
-        <p>License type: <span class="working">{{ license_type }}</span> (upgraded on <span class="datetime">{{ license_timestamp }}</span>)</p>
+        <p>License type: <span class="working">{{ license_type }}</span> <span title="License upgrades before 2016-03-26 show the last installation time.">(upgraded on <span class="datetime">{{ license_timestamp }}</span>*)</span></p>
 {% else %}
         <p>License type: {{ license_type }}</p>
 {% endif %}

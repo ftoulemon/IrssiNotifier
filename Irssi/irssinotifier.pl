@@ -9,7 +9,7 @@ use POSIX;
 use Encode;
 use vars qw($VERSION %IRSSI);
 
-$VERSION = "20";
+$VERSION = "21";
 %IRSSI   = (
     authors     => "Lauri \'murgo\' Härsilä",
     contact     => "murgo\@iki.fi",
@@ -17,7 +17,7 @@ $VERSION = "20";
     description => "Send notifications about irssi highlights to server",
     license     => "Apache License, version 2.0",
     url         => "https://irssinotifier.appspot.com",
-    changed     => "2014-04-08"
+    changed     => "2016-03-26"
 );
 
 # Sometimes, for some unknown reason, perl emits warnings like the following:
@@ -81,15 +81,14 @@ sub dcc {
 sub print_text {
     my ($dest, $text, $stripped) = @_;
 
-    if (!defined $lastMsg || index($text, $lastMsg) == -1)
-    {
-        # text doesn't contain the message, so printed text is about something else and notification doesn't need to be sent
-        return;
-    }
-
-    if (should_send_notification($dest))
-    {
-        send_notification();
+    # We only need to check that it's a dcc, hilight, or privmsg
+    # before checking whether we need to send.
+    my $opt = MSGLEVEL_HILIGHT | MSGLEVEL_MSGS;
+    if ($lastDcc || (($dest->{level} & $opt) &&
+                     ($dest->{level} & MSGLEVEL_NOHILIGHT) == 0)) {
+        if (should_send_notification($dest)) {
+            send_notification();
+        }
     }
 }
 
